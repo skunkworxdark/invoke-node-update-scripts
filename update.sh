@@ -1,16 +1,34 @@
 #!/bin/bash
-for i in */; do
-    # Remove trailing slash
-    dir_name=${i%/}
-    # If the directory begins with _, skip it
-    if [[ ${dir_name:0:1} == "_" ]]; then
-        echo "Ignoring $dir_name"
-    elif [[ ! -d "$i/.git" ]]; then
-        # If the directory does not contain a .git directory, skip it
-        echo "Skipping $dir_name - No repository found"
+
+target_dir=$1
+is_single_dir=0
+
+if [ -z "$target_dir" ]; then
+  target_dir="*"
+else
+  is_single_dir=1
+fi
+
+for dir in $target_dir; do
+  dir=${dir%/}
+  if [ $is_single_dir -eq 0 ]; then
+    if [[ "$dir" > "_" && "$dir" < "_z" ]]; then
+      echo "Ignoring $dir"
     else
-        echo "Pulling $dir_name"
-        git -C "$i" pull
+      check_dir "$dir"
     fi
+  else
+    check_dir "$dir"
+  fi
 done
+
 read -p "Press enter to continue"
+
+function check_dir {
+  if [ -d "$1/.git" ]; then
+    echo "Pulling $1"
+    git -C "$1" pull
+  else
+    echo "Skipping $1 - No Git Repo found"
+  fi
+}
