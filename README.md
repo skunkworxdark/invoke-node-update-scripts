@@ -8,12 +8,12 @@ Additionally, (mostly untested so use with caution) Linux ".sh" versions that I 
 
 Window batch files:
 - update.bat : Update all nodes with a git pull
-- update_list.bat : Checks all nodes and reports if any are behind along with a url that shows what has been updated
+- update_list.bat : Checks all nodes and reports if any are behind along with a url that shows what has been updated (does not update)
 - update_force.bat : Update all repos but overwrite of any local changes (using clean, checkout & pull)
 
 Linux versions:
 - update.sh : Update all nodes
-- update_list.sh : Checks all nodes and reports if any are behind along with a url that shows what has been updated
+- update_list.sh : Checks all nodes and reports if any are behind along with a url that shows what has been updated (does not update)
 - update_force.sh : Update all repos but overwrite of any local changes (using clean, checkout & pull)
 
-Note: The linux versions will need `chmod +x scriptname.sh` before you can run it with `./scriptname.sh`
+**Note:** The Linux versions will need `chmod +x scriptname.sh` before you can run it with `./scriptname.sh`
