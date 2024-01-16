@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 echo The following directories have updates to download: > updates.txt
 for /d %%d in (*) do (
   if "%%d"=="__pycache__" (
-    echo Skipping __pycache__ directory
+    rem echo Skipping __pycache__ directory
   ) else (
     cd "%%d"
     if exist .git (
@@ -18,7 +18,16 @@ for /d %%d in (*) do (
         )
       )
       if !behind! equ 1 (
-        echo %%d is !commits! commits behind >> ..\updates.txt
+        for /f "delims=" %%u in ('git config --get remote.origin.url') do (
+          set repo_url=%%u
+          set repo_url=!repo_url:https://github.com/=https://github.com/!
+          set repo_url=!repo_url:.git=!
+          for /f "delims=" %%h in ('git rev-parse HEAD') do (
+            echo %%d is !commits! commits behind. >> ..\updates.txt
+            echo !repo_url!/compare/%%h...main >> ..\updates.txt
+          )
+          rem echo %%d is !commits! commits behind. (%%u^) >> ..\updates.txt
+        )
       ) else (
         REM echo No updates for "%%d"
       )
